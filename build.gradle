@@ -1,0 +1,21 @@
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'maven'
+
+	defaultTasks 'tasks'
+
+	group = 'net.maatvirtue'
+	version = '0.0.1'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.12'
+}
