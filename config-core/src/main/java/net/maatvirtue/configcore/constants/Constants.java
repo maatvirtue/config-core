@@ -4,7 +4,7 @@ public class Constants
 {
 	public static final String BASE_PACKAGE = "net.maatvirtue.configcore";
 	public static final String ENTITY_PACKAGE = BASE_PACKAGE + ".entity";
-	public static final String JPA_REPOSITORY_PACKAGE = BASE_PACKAGE + ".jparepository";
+	public static final String JPA_REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";
 	public static final String SPRING_CONFIG_PACKAGE = BASE_PACKAGE + ".config.spring";
 
 	//Web service
