@@ -1,5 +1,6 @@
 package net.maatvirtue.configcore.api.webservice;
 
+import net.maatvirtue.configcore.api.dto.Config;
 import net.maatvirtue.wsutils.restexception.exception.NotFoundRestException;
 
 import javax.ws.rs.Consumes;
@@ -16,5 +17,5 @@ public interface ConfigWebService
 {
 	@GET
 	@Path("/{configKey}")
-	String getConfigValue(@PathParam("configKey") String configKey) throws NotFoundRestException;
+	Config getConfig(@PathParam("configKey") String configKey) throws NotFoundRestException;
 }
