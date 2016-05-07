@@ -3,9 +3,7 @@ package net.maatvirtue.configcore.config.spring;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import net.maatvirtue.wsutils.filter.CorsFilter;
 import net.maatvirtue.wsutils.filter.RequestLogFilter;
-import net.maatvirtue.wsutils.restexception.providers.GlobalExceptionMapper;
-import net.maatvirtue.wsutils.restexception.providers.RestExceptionBodyReader;
-import net.maatvirtue.wsutils.restexception.providers.RestExceptionCxfClientMapper;
+import net.maatvirtue.wsutils.restexception.providers.RestExceptionFeature;
 import org.apache.cxf.jaxrs.spring.SpringComponentScanServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,21 +14,9 @@ import org.springframework.context.annotation.Import;
 public class CxfConfiguration
 {
 	@Bean
-	public GlobalExceptionMapper globalExceptionMapper()
+	public RestExceptionFeature restExceptionFeature()
 	{
-		return new GlobalExceptionMapper();
-	}
-
-	@Bean
-	public RestExceptionBodyReader restExceptionBodyReader()
-	{
-		return new RestExceptionBodyReader();
-	}
-
-	@Bean
-	public RestExceptionCxfClientMapper restExceptionCxfClientMapper()
-	{
-		return new RestExceptionCxfClientMapper();
+		return new RestExceptionFeature("net.maatvirtue");
 	}
 
 	@Bean

@@ -1,7 +1,6 @@
 package net.maatvirtue.configcore.config.web;
 
 import net.maatvirtue.configcore.constants.Constants;
-import net.maatvirtue.wsutils.restexception.impl.RestExceptionScanner;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -30,13 +29,6 @@ public class WebAppInitializer implements WebApplicationInitializer
 		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
 		applicationContext.scan(Constants.SPRING_CONFIG_PACKAGE);
 
-		setupRestException();
-
 		container.addListener(new ContextLoaderListener(applicationContext));
-	}
-
-	private void setupRestException()
-	{
-		new RestExceptionScanner("net.maatvirtue").scan();
 	}
 }
