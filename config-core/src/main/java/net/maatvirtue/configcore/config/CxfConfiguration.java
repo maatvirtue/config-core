@@ -1,4 +1,4 @@
-package net.maatvirtue.configcore.config.spring;
+package net.maatvirtue.configcore.config;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import net.maatvirtue.wsutils.filter.CorsFilter;
