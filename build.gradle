@@ -40,6 +40,7 @@ task wrapper(type: Wrapper) {
 
 task buildDocker(type: Docker, dependsOn: build) {
 	tag = "maatvirtue/${project.name}"
+	pull = true
 	push = true
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
