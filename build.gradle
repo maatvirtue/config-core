@@ -15,7 +15,7 @@ apply plugin: 'docker'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'net.maatvirtue'
-version = '2.0.9'
+version = '2.0.10'
 
 defaultTasks 'tasks'
 
