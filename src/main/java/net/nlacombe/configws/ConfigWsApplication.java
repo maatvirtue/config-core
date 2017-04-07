@@ -12,10 +12,10 @@ import org.springframework.context.annotation.PropertySource;
 @EnableDiscoveryClient
 @Configuration
 @PropertySource("classpath:/secret.properties")
-public class ConfigCoreApplication
+public class ConfigWsApplication
 {
 	public static void main(String[] args)
 	{
-		SpringApplication.run(ConfigCoreApplication.class);
+		SpringApplication.run(ConfigWsApplication.class);
 	}
 }
