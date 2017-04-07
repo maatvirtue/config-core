@@ -6,7 +6,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="net.maatvirtue.configcore">
+	<logger name="net.nlacombe.configws">
 		<level value="debug" />
 	</logger>
 

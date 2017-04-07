@@ -1,4 +1,4 @@
-package net.maatvirtue.configcore;
+package net.nlacombe.configws;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
