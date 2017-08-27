@@ -13,6 +13,7 @@ buildscript {
 apply plugin: 'org.springframework.boot'
 apply plugin: 'docker'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven'
 
 group = 'net.nlacombe'
 version = '2.0.15'
