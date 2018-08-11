@@ -4,39 +4,49 @@ buildscript {
 	}
 
 	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE"
-		classpath "io.spring.gradle:dependency-management-plugin:1.0.1.RELEASE"
+		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE'
+		classpath 'io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE'
 		classpath 'se.transmode.gradle:gradle-docker:1.2'
 	}
 }
 
+apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'docker'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
 
 group = 'net.nlacombe'
-version = '2.0.15'
+version = '3.0.0'
+
+sourceCompatibility = 10
+targetCompatibility = 10
 
 defaultTasks 'tasks'
 
 dependencyManagement {
 	imports {
-		mavenBom 'org.springframework.cloud:spring-cloud-config:1.3.0.RELEASE'
-		mavenBom "org.springframework.cloud:spring-cloud-consul-dependencies:1.1.3.RELEASE"
+		mavenBom 'org.springframework.cloud:spring-cloud-config:2.0.0.RELEASE'
 	}
 }
 
 dependencies {
+	compile 'net.nlacombe:auth-lib:8.0.0'
+
 	compile 'org.springframework.cloud:spring-cloud-config-server'
-	compile 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
 	compile 'org.springframework.boot:spring-boot-starter-actuator'
+	compile 'org.springframework.boot:spring-boot-starter-security'
 
 	runtime 'ch.qos.logback:logback-classic:1.2.3'
 }
 
-task wrapper(type: Wrapper) {
-	gradleVersion = '3.4.2'
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+wrapper {
+	gradleVersion = '4.9'
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
@@ -45,12 +55,31 @@ task buildDocker(type: Docker, dependsOn: build) {
 	doFirst {
 		copy {
 			from jar
+			from file('src/main/docker/')
 			into stageDir
 		}
 	}
 }
 
-repositories {
-	mavenCentral()
-	mavenLocal()
+task appengineDeploy(type: Exec, dependsOn: build) {
+	def appengineBuildDir = file('build/appengine/')
+	def version = project.version.replaceAll('\\.', '-') + '-' + getDateTimestamp()
+
+	workingDir appengineBuildDir
+	commandLine 'gcloud', 'app', 'deploy', '-q', '-v', version
+
+	doFirst {
+		copy {
+			from jar
+			from file('src/main/appengine/app.yaml')
+			from file('src/main/docker/')
+			into appengineBuildDir
+		}
+	}
+}
+
+def static getDateTimestamp() {
+	def date = new Date()
+	def formattedDate = date.format('yyyyMMddHHmmss')
+	return formattedDate
 }
