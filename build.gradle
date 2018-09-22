@@ -31,7 +31,7 @@ dependencyManagement {
 }
 
 dependencies {
-	compile 'net.nlacombe:auth-lib:8.0.0'
+	compile 'net.nlacombe:auth-lib:10.0.0'
 
 	compile 'org.springframework.cloud:spring-cloud-config-server'
 	compile 'org.springframework.boot:spring-boot-starter-actuator'
