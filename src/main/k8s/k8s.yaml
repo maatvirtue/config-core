@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-ws
+  labels:
+    app: config-ws
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-ws
+  template:
+    metadata:
+      labels:
+        app: config-ws
+    spec:
+      containers:
+        - name: config-ws
+          image: gcr.io/nlacombe-net-prod/config-ws:3.0.0-20190816220938
+          env:
+            - name: PORT
+              value: "80"
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-ws
+spec:
+  selector:
+    app: config-ws
+  ports:
+    - port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: config-ws
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/frontend-entry-points: https
+spec:
+  rules:
+    - host: config-api.nlacombe.net
+      http:
+        paths:
+          - backend:
+              serviceName: config-ws
+              servicePort: 80
