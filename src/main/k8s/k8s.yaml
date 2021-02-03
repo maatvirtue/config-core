@@ -16,10 +16,17 @@ spec:
     spec:
       containers:
         - name: config-ws
-          image: gcr.io/nlacombe-net-prod/config-ws:3.0.1-20201213191007
+          image: gcr.io/nlacombe-net-prod/config-ws:3.1.0-20210203144723
           env:
             - name: PORT
               value: "80"
+          volumeMounts:
+            - name: config-ws-config
+              mountPath: /app/config
+              readOnly: true
+            - name: config-store-config
+              mountPath: /app/config-store/
+              readOnly: true
           ports:
             - containerPort: 80
           resources:
@@ -29,6 +36,13 @@ spec:
             limits:
               cpu: 600m
               memory: 284Mi
+      volumes:
+        - name: config-ws-config
+          secret:
+            secretName: config-ws-config
+        - name: config-store-config
+          secret:
+            secretName: config-store-config
 ---
 apiVersion: v1
 kind: Service

@@ -4,29 +4,30 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE'
-		classpath 'io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE'
 		classpath 'se.transmode.gradle:gradle-docker:1.2'
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
+plugins {
+	id 'java'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '2.4.2'
+	id 'idea'
+}
+
 apply plugin: 'docker'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'maven'
 
 group = 'net.nlacombe'
-version = '3.0.1'
+version = '3.1.0'
 
-sourceCompatibility = 10
-targetCompatibility = 10
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 defaultTasks 'tasks'
 
 dependencyManagement {
 	imports {
-		mavenBom 'org.springframework.cloud:spring-cloud-config:2.0.0.RELEASE'
+		mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2020.0.0'
 	}
 }
 
@@ -36,13 +37,13 @@ project.ext.gcloudProjectId = 'nlacombe-net-prod'
 String gcloudDockerImageUrl
 
 dependencies {
-	compile 'net.nlacombe:auth-lib:10.0.0'
+	implementation 'net.nlacombe:auth-lib:10.0.0'
 
-	compile 'org.springframework.cloud:spring-cloud-config-server'
-	compile 'org.springframework.boot:spring-boot-starter-actuator'
-	compile 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.cloud:spring-cloud-config-server'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	runtime 'ch.qos.logback:logback-classic:1.2.3'
+	runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
 }
 
 repositories {
@@ -51,10 +52,18 @@ repositories {
 }
 
 wrapper {
-	gradleVersion = '4.9'
+	gradleVersion = '6.8.1'
 }
 
-task buildDocker(type: Docker, dependsOn: assemble) {
+idea {
+	module {
+		downloadJavadoc = true
+		downloadSources = false
+	}
+}
+
+
+task buildDockerImage(type: Docker, dependsOn: assemble) {
 	tag = "${project.name}"
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
@@ -80,14 +89,6 @@ task buildGcloudDockerImage(type: Exec, dependsOn: assemble) {
 			into project.gcloudBuildDir
 		}
 	}
-}
-
-task deployToProdGcloud(type: Exec, dependsOn: buildGcloudDockerImage) {
-	workingDir project.gcloudBuildDir
-	commandLine 'gcloud', 'beta', 'run', 'deploy', "${project.name}",
-			'--region', 'us-central1',
-			'--memory', '500M',
-			'--image', gcloudDockerImageUrl
 }
 
 def getGcloudDockerImageUrl(date) {
